@@ -7,17 +7,18 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Hospital.Models;
+using Hospital.DAL;
 
 namespace Hospital.Controllers
 {
     public class DoctorsController : Controller
     {
-        private HospitalContext db = new HospitalContext();
+        private DoctorsRepository db = new DoctorsRepository(new HospitalContext());
 
         // GET: Doctors
         public ActionResult Index()
         {
-            return View(db.Doctors.ToList());
+            return View(db.GetAll());
         }
 
         // GET: Doctors/Details/5
@@ -27,7 +28,7 @@ namespace Hospital.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Doctor doctor = db.Doctors.Find(id);
+            Doctor doctor = db.Get(id.Value);
             if (doctor == null)
             {
                 return HttpNotFound();
@@ -50,8 +51,7 @@ namespace Hospital.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Doctors.Add(doctor);
-                db.SaveChanges();
+                db.Add(doctor);
                 return RedirectToAction("Index");
             }
 
@@ -65,7 +65,7 @@ namespace Hospital.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Doctor doctor = db.Doctors.Find(id);
+            Doctor doctor = db.Get(id.Value);
             if (doctor == null)
             {
                 return HttpNotFound();
@@ -82,8 +82,7 @@ namespace Hospital.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(doctor).State = EntityState.Modified;
-                db.SaveChanges();
+                db.Update(doctor);                
                 return RedirectToAction("Index");
             }
             return View(doctor);
@@ -96,7 +95,7 @@ namespace Hospital.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Doctor doctor = db.Doctors.Find(id);
+            Doctor doctor = db.Get(id.Value);
             if (doctor == null)
             {
                 return HttpNotFound();
@@ -109,10 +108,19 @@ namespace Hospital.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Doctor doctor = db.Doctors.Find(id);
-            db.Doctors.Remove(doctor);
-            db.SaveChanges();
+            Doctor doctor = db.Get(id);
+            db.Remove(doctor);
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Search(string doctorName)
+        {
+            var doctors = new List<Doctor>();
+            if (!string.IsNullOrEmpty(doctorName))
+            {
+                doctors = db.Find(d => d.Name.Contains(doctorName)).ToList();
+            }
+            return View(doctors);
         }
 
         protected override void Dispose(bool disposing)

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Hospital.Models.Patient>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DayOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TaxCode)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var patient in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => patient.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => patient.DayOfBirth)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => patient.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => patient.TaxCode)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = patient.Id }) |
+                @Html.ActionLink("Details", "Details", new { id = patient.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = patient.Id }) |
+                @Html.ActionLink("Assign to Doctor", "AssignToDoctor", new { patientId = patient.Id, patientName = patient.Name })
+            </td>
+        </tr>
+    }
+
+</table>

@@ -137,13 +137,20 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\DoctorsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PatientsController.cs" />
+    <Compile Include="DAL\DoctorsRepository.cs" />
+    <Compile Include="DAL\IRepository.cs" />
+    <Compile Include="DAL\PatientsRepository.cs" />
+    <Compile Include="DAL\Repository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Doctor.cs" />
     <Compile Include="Models\HospitalContext.cs" />
     <Compile Include="Models\Patient.cs" />
+    <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\ViewModels\AssignedDoctor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -189,6 +196,12 @@
     <Content Include="Views\Patients\Details.cshtml" />
     <Content Include="Views\Patients\Edit.cshtml" />
     <Content Include="Views\Patients\Delete.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Doctors\Search.cshtml" />
+    <Content Include="Views\Patients\Search.cshtml" />
+    <Content Include="Views\Doctors\DoctorsTable.cshtml" />
+    <Content Include="Views\Patients\PatientsTable.cshtml" />
+    <Content Include="Views\Patients\AssignToDoctor.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

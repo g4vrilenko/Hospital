@@ -1,0 +1,108 @@
+﻿@model IEnumerable<Hospital.Models.ViewModels.AssignedDoctor>
+@{
+    ViewBag.Title = "AssignToDoctor";
+}
+
+<h2>Assign doctor to @ViewBag.PatientName</h2>
+<input id="saveChanges" class="btn btn-info pull-right" type="button" value="Save changes" />
+@Html.ActionLink("Back to List", "Index")
+<span id="changes-saved" style="margin-right:15px; display:none; font-size:16px" class="label label-success pull-right">Changes saved!</span>
+<br />
+<br />
+<div class="panel panel-default">
+    <div class="panel-heading">Doctors</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>@Html.DisplayNameFor(m => m.Name)</td>
+                <td>@Html.DisplayNameFor(m => m.Specialization)</td>
+                <td>Assign</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Model)
+            {
+                <tr class="doctor-container">
+                    <td>
+                        <div class="doctor-name">@doctor.Name</div>
+                        <input type="hidden" class="doctor-id" value="@doctor.Id" />
+                    </td>
+                    <td><div class="doctor-spec">@doctor.Specialization</div></td>
+                    <td>
+                        <button value="@doctor.IsAssigned.ToString().ToLower()" class="is-assigned btn @((doctor.IsAssigned) ? "btn-success" : "btn-default")" style="width:100%">
+                            <span class="glyphicon @((doctor.IsAssigned) ? "glyphicon-ok" : "glyphicon-minus")" aria-hidden="true"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section scripts{
+    <script>
+        (function () {
+            var patientName = "@ViewBag.PatientName";
+            var patientId = "@ViewBag.PatientId";
+            var submitBtn = $('#saveChanges');            
+            submitBtn.click(function () {
+                var request = $.ajax({
+                    url: "AssignToDoctor",
+                    method: "POST",
+                    data: {
+                        patientId: patientId,
+                        doctors: collectDoctors()
+                    },
+                    dataType: "html"
+                });
+
+                request.done(function (res) {
+                    $('#changes-saved').show();
+                    setTimeout(function () { $('#changes-saved').hide(); }, 2000);
+                    //window.location.href = "AssignToDoctor?patientName=" + patientName + "&patientId=" + patientId;
+                });
+            });
+
+            $(".is-assigned").click(function () {
+                var btn = this;
+                var value = $(btn).val();
+                if (value === "true")
+                    $(btn).val(false);
+                else
+                    $(btn).val(true);
+
+                var success = "btn-success";
+                var def = "btn-default";
+                if ($(btn).hasClass(def))
+                    $(btn).removeClass(def).addClass(success);
+                else
+                    $(btn).removeClass(success).addClass(def);
+
+                var span = $(btn).find('span');
+                var ok = "glyphicon-ok";
+                var minus = "glyphicon-minus";
+                if ($(span).hasClass(ok))
+                    $(span).removeClass(ok).addClass(minus);
+                else
+                    $(span).removeClass(minus).addClass(ok);
+            });
+
+            function collectDoctors() {
+                var doctors = [];
+                $(".doctor-container").each(function (index, el) {
+                    var doctorId = $(el).find(".doctor-id").val();
+                    var isAssigned = $(el).find(".is-assigned").val();
+                    var assignedDoctor = {
+                        Id: doctorId,
+                        Name: "",
+                        Specialization: "",
+                        IsAssigned: isAssigned
+                    };
+                    doctors.push(assignedDoctor);
+                });
+                return doctors;
+            }
+        })();
+    </script>
+
+}

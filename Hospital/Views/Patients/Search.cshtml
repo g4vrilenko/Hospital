@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Hospital.Models.Patient>
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+
+<div class="container">
+
+    @using (Html.BeginForm("Search", "Patients", FormMethod.Get))
+    {
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="input-group">
+                    <input name="patientName" type="text" class="form-control" placeholder="Enter patient name...">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">Search</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    <br />
+    <br />
+    @Html.Partial("PatientsTable")
+</div>

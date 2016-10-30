@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
@@ -18,8 +19,9 @@ namespace Hospital.Models
         /// 
         /// TODO: change it to enum
         /// </summary>
-        public int Status { get; set; }
+        public Status Status { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DayOfBirth { get; set; }
 
         /// <summary>
